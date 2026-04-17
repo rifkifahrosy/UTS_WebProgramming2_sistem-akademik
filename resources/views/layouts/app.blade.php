@@ -12,6 +12,8 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="{{ asset('favicon.png') }}">
 
     <style>
         :root {
@@ -323,8 +325,14 @@
         }
 
         .pagination .page-item.active .page-link {
-            background: var(--primary);
+            background-color: var(--primary);
             border-color: var(--primary);
+            color: #ffffff;
+        }
+
+        .pagination .page-link:hover {
+            color: var(--primary-dark);
+            background-color: #e0e7ff;
         }
 
         /* ─── Empty State ─── */
@@ -379,7 +387,7 @@
         </a>
     </div>
 
-    <div class="sidebar-footer">
+    {{-- <div class="sidebar-footer">
         <form action="{{ route('logout') }}" method="POST">
             @csrf
             <button type="submit" class="nav-link border-0 w-100 text-start"
@@ -387,7 +395,7 @@
                 <i class="bi bi-box-arrow-left"></i> Logout
             </button>
         </form>
-    </div>
+    </div> --}}
 </nav>
 
 <!-- ─── Main Content ─── -->
@@ -399,12 +407,29 @@
             <small>@yield('page-subtitle', 'Sistem Informasi Akademik')</small>
         </div>
         <div class="d-flex align-items-center gap-3">
-            <div class="d-flex align-items-center gap-2">
-                <div class="user-avatar">{{ strtoupper(substr(Auth::user()->name, 0, 1)) }}</div>
-                <div>
-                    <div style="font-size:0.82rem; font-weight:600; color:#1e293b;">{{ Auth::user()->name }}</div>
-                    <div style="font-size:0.72rem; color:#94a3b8;">Administrator</div>
+            <div class="dropdown">
+                <div class="d-flex align-items-center gap-2" style="cursor: pointer;" data-bs-toggle="dropdown" aria-expanded="false">
+                    <div class="user-avatar">{{ strtoupper(substr(Auth::user()->name, 0, 1)) }}</div>
+                    <div class="d-none d-sm-block">
+                        <div style="font-size:0.82rem; font-weight:600; color:#1e293b;">{{ Auth::user()->name }}</div>
+                        <div style="font-size:0.72rem; color:#94a3b8;">Administrator <i class="bi bi-chevron-down ms-1" style="font-size: 0.6rem;"></i></div>
+                    </div>
                 </div>
+                <ul class="dropdown-menu dropdown-menu-end border-0 shadow-sm mt-2" style="border-radius: 12px; min-width: 180px;">
+                    <li><h6 class="dropdown-header">Akun Saya</h6></li>
+                    <li><a class="dropdown-item py-2" href="{{ route('profile.password') }}">
+                        <i class="bi bi-shield-lock me-2 text-primary"></i> Ubah Password
+                    </a></li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li>
+                        <form action="{{ route('logout') }}" method="POST">
+                            @csrf
+                            <button type="submit" class="dropdown-item py-2 text-danger">
+                                <i class="bi bi-box-arrow-left me-2"></i> Logout
+                            </button>
+                        </form>
+                    </li>
+                </ul>
             </div>
         </div>
     </div>

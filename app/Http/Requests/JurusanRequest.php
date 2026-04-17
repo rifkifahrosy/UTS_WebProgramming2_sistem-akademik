@@ -15,7 +15,7 @@ class JurusanRequest extends FormRequest
     {
         return [
             'nama_jurusan' => 'required|string|max:100',
-            'akreditasi'   => 'required|string|in:A,B,C,Unggul,Baik Sekali,Baik',
+            'akreditasi'   => 'required|string|in:Unggul,Baik Sekali,Baik',
         ];
     }
 
@@ -25,7 +25,7 @@ class JurusanRequest extends FormRequest
             'nama_jurusan.required' => 'Nama jurusan wajib diisi.',
             'nama_jurusan.max'      => 'Nama jurusan maksimal 100 karakter.',
             'akreditasi.required'   => 'Akreditasi wajib dipilih.',
-            'akreditasi.in'         => 'Akreditasi harus salah satu dari: A, B, C, Unggul, Baik Sekali, Baik.',
+            'akreditasi.in'         => 'Akreditasi harus salah satu dari: Unggul, Baik Sekali, Baik.',
         ];
     }
 }

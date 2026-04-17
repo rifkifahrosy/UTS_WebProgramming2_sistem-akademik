@@ -24,4 +24,8 @@ Route::middleware('auth')->group(function () {
     Route::resource('jurusan', JurusanController::class)->except(['show']);
     Route::resource('mahasiswa', MahasiswaController::class)->except(['show']);
     Route::resource('matakuliah', MatakuliahController::class)->except(['show']);
+
+    // Profile & Password
+    Route::get('/profile/password', [\App\Http\Controllers\ProfileController::class, 'editPassword'])->name('profile.password');
+    Route::put('/profile/password', [\App\Http\Controllers\ProfileController::class, 'updatePassword'])->name('profile.password.update');
 });

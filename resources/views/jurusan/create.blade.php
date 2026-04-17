@@ -34,7 +34,7 @@
                         <select id="akreditasi" name="akreditasi"
                                 class="form-select @error('akreditasi') is-invalid @enderror" required>
                             <option value="">— Pilih Akreditasi —</option>
-                            @foreach(['Unggul', 'Baik Sekali', 'Baik', 'A', 'B', 'C'] as $ak)
+                            @foreach(['Unggul', 'Baik Sekali', 'Baik'] as $ak)
                                 <option value="{{ $ak }}" {{ old('akreditasi') == $ak ? 'selected' : '' }}>
                                     {{ $ak }}
                                 </option>
