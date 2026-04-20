@@ -104,15 +104,16 @@
                                    class="btn btn-sm btn-outline-primary" title="Edit">
                                     <i class="bi bi-pencil"></i>
                                 </a>
-                                <form action="{{ route('mahasiswa.destroy', $m->id_mahasiswa) }}"
-                                      method="POST" class="d-inline"
-                                      onsubmit="return confirm('Hapus mahasiswa \'{{ $m->nama }}\'?')">
-                                    @csrf @method('DELETE')
-                                    <button type="submit" id="btn-hapus-mahasiswa-{{ $m->id_mahasiswa }}"
-                                            class="btn btn-sm btn-outline-danger" title="Hapus">
-                                        <i class="bi bi-trash"></i>
-                                    </button>
-                                </form>
+                                <button type="button" 
+                                        id="btn-hapus-mahasiswa-{{ $m->id_mahasiswa }}"
+                                        class="btn btn-sm btn-outline-danger" 
+                                        data-bs-toggle="modal" 
+                                        data-bs-target="#deleteModal" 
+                                        data-action="{{ route('mahasiswa.destroy', $m->id_mahasiswa) }}" 
+                                        data-message="Hapus mahasiswa '{{ $m->nama }}'?"
+                                        title="Hapus">
+                                    <i class="bi bi-trash"></i>
+                                </button>
                             </div>
                         </td>
                     </tr>

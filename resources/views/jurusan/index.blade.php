@@ -101,15 +101,16 @@
                                    class="btn btn-sm btn-outline-primary" title="Edit">
                                     <i class="bi bi-pencil"></i>
                                 </a>
-                                <form action="{{ route('jurusan.destroy', $j->id_jurusan) }}"
-                                      method="POST" class="d-inline"
-                                      onsubmit="return confirm('Hapus jurusan \'{{ $j->nama_jurusan }}\'? Semua mahasiswa dan matakuliah terkait juga akan dihapus!')">
-                                    @csrf @method('DELETE')
-                                    <button type="submit" id="btn-hapus-jurusan-{{ $j->id_jurusan }}"
-                                            class="btn btn-sm btn-outline-danger" title="Hapus">
-                                        <i class="bi bi-trash"></i>
-                                    </button>
-                                </form>
+                                <button type="button" 
+                                        id="btn-hapus-jurusan-{{ $j->id_jurusan }}"
+                                        class="btn btn-sm btn-outline-danger" 
+                                        data-bs-toggle="modal" 
+                                        data-bs-target="#deleteModal" 
+                                        data-action="{{ route('jurusan.destroy', $j->id_jurusan) }}" 
+                                        data-message="Hapus jurusan '{{ $j->nama_jurusan }}'? Semua mahasiswa dan matakuliah terkait juga akan dihapus!"
+                                        title="Hapus">
+                                    <i class="bi bi-trash"></i>
+                                </button>
                             </div>
                         </td>
                     </tr>

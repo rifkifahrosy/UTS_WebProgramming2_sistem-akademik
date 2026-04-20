@@ -454,8 +454,54 @@
     </div>
 </div>
 
+<!-- Global Delete Modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow" style="border-radius: 12px;">
+            <div class="modal-header border-bottom-0 pb-0">
+                <h5 class="modal-title" id="deleteModalLabel" style="font-weight: 600;">Konfirmasi Hapus</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body text-center py-4">
+                <i class="bi bi-exclamation-circle text-danger mb-3" style="font-size: 3.5rem;"></i>
+                <p class="mb-0" id="deleteModalMessage" style="font-size: 0.95rem; color: #475569;">Apakah Anda yakin ingin menghapus data ini?</p>
+            </div>
+            <div class="modal-footer border-top-0 pt-0 justify-content-center pb-4">
+                <button type="button" class="btn btn-light px-4" data-bs-dismiss="modal">Batal</button>
+                <form id="deleteForm" method="POST" class="d-inline">
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit" class="btn btn-danger px-4">Ya, Hapus</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
 <!-- Bootstrap JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const deleteModal = document.getElementById('deleteModal');
+        if (deleteModal) {
+            deleteModal.addEventListener('show.bs.modal', function (event) {
+                const button = event.relatedTarget;
+                const url = button.getAttribute('data-action');
+                const message = button.getAttribute('data-message');
+                
+                const form = document.getElementById('deleteForm');
+                form.action = url;
+                
+                if (message) {
+                    document.getElementById('deleteModalMessage').textContent = message;
+                } else {
+                    document.getElementById('deleteModalMessage').textContent = "Apakah Anda yakin ingin menghapus data ini?";
+                }
+            });
+        }
+    });
+</script>
+
 @stack('scripts')
 </body>
 </html>

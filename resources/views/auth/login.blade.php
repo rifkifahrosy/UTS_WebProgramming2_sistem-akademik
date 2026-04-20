@@ -251,9 +251,9 @@
             </button>
         </form>
 
-        <div class="login-hint">
+        {{-- <div class="login-hint">
             <p>Demo: <strong>admin@akademik.com</strong> / <strong>password123</strong></p>
-        </div>
+        </div> --}}
     </div>
 </div>
 
