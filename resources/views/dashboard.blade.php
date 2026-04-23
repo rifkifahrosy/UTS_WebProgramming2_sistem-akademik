@@ -92,16 +92,16 @@
                         <td>
                             @php
                                 $colors = [
-                                    'Unggul'      => 'success',
-                                    'A'           => 'primary',
-                                    'Baik Sekali' => 'info',
-                                    'B'           => 'warning',
-                                    'Baik'        => 'secondary',
-                                    'C'           => 'danger',
+                                    'Unggul'      => ['bg'=>'#d1fae5','text'=>'#065f46'],
+                                    'Baik Sekali' => ['bg'=>'#e0f2fe','text'=>'#0369a1'],
+                                    'Baik'        => ['bg'=>'#f1f5f9','text'=>'#475569'],
                                 ];
-                                $color = $colors[$j->akreditasi] ?? 'secondary';
+                                $c = $colors[$j->akreditasi] ?? ['bg'=>'#f1f5f9','text'=>'#475569'];
                             @endphp
-                            <span class="badge bg-{{ $color }} badge-akreditasi">{{ $j->akreditasi }}</span>
+                            <span class="badge-akreditasi"
+                                  style="background:{{ $c['bg'] }}; color:{{ $c['text'] }};">
+                                {{ $j->akreditasi }}
+                            </span>
                         </td>
                         <td class="text-center">
                             <span class="badge rounded-pill" style="background:#e0e7ff; color:#4f46e5; font-size:0.8rem; padding:4px 10px;">

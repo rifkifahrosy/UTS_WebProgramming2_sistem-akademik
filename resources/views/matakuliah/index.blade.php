@@ -129,11 +129,8 @@
                                 @php
                                     $colors = [
                                         'Unggul'      => ['bg'=>'#d1fae5','text'=>'#065f46'],
-                                        'A'           => ['bg'=>'#ede9fe','text'=>'#5b21b6'],
                                         'Baik Sekali' => ['bg'=>'#e0f2fe','text'=>'#0369a1'],
-                                        'B'           => ['bg'=>'#fef3c7','text'=>'#92400e'],
                                         'Baik'        => ['bg'=>'#f1f5f9','text'=>'#475569'],
-                                        'C'           => ['bg'=>'#fee2e2','text'=>'#991b1b'],
                                     ];
                                     $c = $colors[$mk->jurusan->akreditasi] ?? ['bg'=>'#f1f5f9','text'=>'#475569'];
                                 @endphp
