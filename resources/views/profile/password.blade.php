@@ -70,7 +70,6 @@
                 <ul class="mt-3 text-muted" style="font-size: 0.85rem; line-height: 1.6;">
                     <li>Gunakan kombinasi huruf besar, huruf kecil, angka, dan simbol.</li>
                     <li>Hindari menggunakan tanggal lahir atau nama sebagai password.</li>
-                    <li>Jangan beritahukan password Anda kepada siapapun.</li>
                     <li>Sistem akan otomatis melakukan logout setelah password berhasil diubah demi keamanan.</li>
                 </ul>
             </div>
