@@ -6,6 +6,16 @@
 
 @section('content')
 
+@php
+    $sortOptions = [
+        'nama' => ['label' => 'Name', 'icon' => 'bi-alphabet'],
+        'nim' => ['label' => 'NIM', 'icon' => 'bi-hash'],
+        'jurusan' => ['label' => 'Jurusan', 'icon' => 'bi-building'],
+        'created_at' => ['label' => 'Last added', 'icon' => 'bi-clock-history'],
+    ];
+    $currentSort = $sortOptions[$sortBy] ?? $sortOptions['nama'];
+@endphp
+
 <div class="card">
     <div class="card-header d-flex flex-wrap gap-2 align-items-center justify-content-between">
         <div>
@@ -20,21 +30,57 @@
 
     {{-- Search --}}
     <div class="card-body border-bottom py-3">
-        <form action="{{ route('mahasiswa.index') }}" method="GET" id="searchForm">
-            <div class="input-group" style="max-width: 380px;">
-                <span class="input-group-text" style="background:#f8fafc; border-color:#e2e8f0;">
-                    <i class="bi bi-search text-muted"></i>
-                </span>
-                <input type="text" id="search" name="search" class="form-control"
-                       placeholder="Cari NIM, nama, atau jurusan..."
-                       value="{{ $search }}" style="border-color:#e2e8f0;">
-                @if($search)
-                    <a href="{{ route('mahasiswa.index') }}" class="btn btn-outline-secondary">
-                        <i class="bi bi-x-lg"></i>
-                    </a>
-                @endif
+        <div class="d-flex flex-wrap gap-3 align-items-center">
+            <form action="{{ route('mahasiswa.index') }}" method="GET" id="searchForm" class="flex-grow-1" style="max-width: 380px;">
+                <div class="input-group">
+                    <span class="input-group-text" style="background:#f8fafc; border-color:#e2e8f0;">
+                        <i class="bi bi-search text-muted"></i>
+                    </span>
+                    <input type="text" id="search" name="search" class="form-control"
+                           placeholder="Cari NIM, nama, atau jurusan..."
+                           value="{{ $search }}" style="border-color:#e2e8f0;">
+                </div>
+            </form>
+
+            <div class="d-flex align-items-center gap-2 ms-auto">
+            <div class="d-flex align-items-center gap-2 ms-auto">
+                <div id="sort-dropdown-wrapper" class="dropdown sort-dropdown">
+                    <button class="btn dropdown-toggle d-flex align-items-center gap-2" type="button" data-bs-toggle="dropdown">
+                        <i class="bi {{ $sortOrder == 'asc' ? 'bi-sort-down-alt' : 'bi-sort-up' }}"></i>
+                        <span>Sort: {{ $currentSort['label'] }}</span>
+                        <i class="bi bi-caret-down-fill" style="font-size: 0.6rem;"></i>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li class="px-3 py-1 border-bottom mb-1">
+                            <span class="text-muted fw-bold" style="font-size: 0.7rem; text-transform: uppercase;">Sort by</span>
+                        </li>
+                        @foreach($sortOptions as $key => $opt)
+                            <li>
+                                <a class="dropdown-item sort-option {{ $sortBy == $key ? 'active' : '' }}" 
+                                   data-value="{{ $key }}">
+                                    <i class="bi bi-check check-icon"></i>
+                                    <i class="bi {{ $opt['icon'] }}"></i>
+                                    {{ $opt['label'] }}
+                                </a>
+                            </li>
+                        @endforeach
+                        <li class="border-top mt-1 pt-1">
+                            <a class="dropdown-item order-option {{ $sortOrder == 'asc' ? 'active' : '' }}" data-value="asc">
+                                <i class="bi bi-check check-icon"></i>
+                                <i class="bi bi-sort-numeric-down"></i> Ascending
+                            </a>
+                            <a class="dropdown-item order-option {{ $sortOrder == 'desc' ? 'active' : '' }}" data-value="desc">
+                                <i class="bi bi-check check-icon"></i>
+                                <i class="bi bi-sort-numeric-up-alt"></i> Descending
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                {{-- Hidden inputs to store state --}}
+                <input type="hidden" id="sort_by" value="{{ $sortBy }}">
+                <input type="hidden" id="order" value="{{ $sortOrder }}">
             </div>
-        </form>
+        </div>
     </div>
 
     <div id="search-results" class="card-body p-0">
@@ -138,37 +184,68 @@
 <script>
     let searchTimer;
     const searchInput = document.getElementById('search');
+    const sortByInput = document.getElementById('sort_by');
+    const orderInput = document.getElementById('order');
     const resultsContainer = document.getElementById('search-results');
     const totalCount = document.getElementById('total-count');
+    const sortWrapper = document.getElementById('sort-dropdown-wrapper');
+
+    function performSearch() {
+        const url = new URL(window.location.href);
+        url.searchParams.set('search', searchInput.value);
+        url.searchParams.set('sort_by', sortByInput.value);
+        url.searchParams.set('order', orderInput.value);
+        
+        resultsContainer.style.opacity = '0.5';
+
+        fetch(url)
+            .then(response => response.text())
+            .then(html => {
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(html, 'text/html');
+                
+                // Update tabel
+                resultsContainer.innerHTML = doc.getElementById('search-results').innerHTML;
+                
+                // Update total count
+                if (totalCount && doc.getElementById('total-count')) {
+                    totalCount.innerHTML = doc.getElementById('total-count').innerHTML;
+                }
+
+                // Update dropdown button & menu
+                if (sortWrapper && doc.getElementById('sort-dropdown-wrapper')) {
+                    sortWrapper.innerHTML = doc.getElementById('sort-dropdown-wrapper').innerHTML;
+                }
+
+                resultsContainer.style.opacity = '1';
+                window.history.pushState({}, '', url);
+            })
+            .catch(err => {
+                console.error('Search error:', err);
+                resultsContainer.style.opacity = '1';
+            });
+    }
 
     searchInput.addEventListener('input', function() {
         clearTimeout(searchTimer);
-        searchTimer = setTimeout(() => {
-            const url = new URL(window.location.href);
-            url.searchParams.set('search', searchInput.value);
-            
-            resultsContainer.style.opacity = '0.5';
+        searchTimer = setTimeout(performSearch, 300);
+    });
 
-            fetch(url)
-                .then(response => response.text())
-                .then(html => {
-                    const parser = new DOMParser();
-                    const doc = parser.parseFromString(html, 'text/html');
-                    
-                    resultsContainer.innerHTML = doc.getElementById('search-results').innerHTML;
-                    
-                    if (totalCount && doc.getElementById('total-count')) {
-                        totalCount.innerHTML = doc.getElementById('total-count').innerHTML;
-                    }
-
-                    resultsContainer.style.opacity = '1';
-                    window.history.pushState({}, '', url);
-                })
-                .catch(err => {
-                    console.error('Search error:', err);
-                    resultsContainer.style.opacity = '1';
-                });
-        }, 300);
+    // Event Delegation untuk dropdown kustom
+    document.addEventListener('click', function(e) {
+        const sortOption = e.target.closest('.sort-option');
+        if (sortOption) {
+            e.preventDefault();
+            sortByInput.value = sortOption.dataset.value;
+            performSearch();
+        }
+        
+        const orderOption = e.target.closest('.order-option');
+        if (orderOption) {
+            e.preventDefault();
+            orderInput.value = orderOption.dataset.value;
+            performSearch();
+        }
     });
 </script>
 @endpush

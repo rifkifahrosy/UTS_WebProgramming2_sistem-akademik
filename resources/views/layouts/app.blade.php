@@ -16,6 +16,66 @@
     <link rel="icon" type="image/png" href="{{ asset('favicon.png') }}">
 
     <style>
+        /* Sort Dropdown */
+        .sort-dropdown .dropdown-toggle {
+            background: #f6f8fa;
+            border: 1px solid #d0d7de;
+            color: #24292f;
+            font-size: 0.875rem;
+            font-weight: 600;
+            padding: 5px 12px;
+            border-radius: 6px;
+            transition: all 0.2s;
+        }
+        .sort-dropdown .dropdown-toggle:hover {
+            background: #f3f4f6;
+            border-color: #0969da;
+        }
+        .sort-dropdown .dropdown-toggle::after {
+            display: none; /* Hide default caret if we use custom */
+        }
+        .sort-dropdown .dropdown-menu {
+            border-radius: 8px;
+            box-shadow: 0 8px 24px rgba(140,149,159,0.2);
+            border: 1px solid #d0d7de;
+            min-width: 180px;
+            padding: 4px;
+            margin-top: 4px !important;
+        }
+        .sort-dropdown .dropdown-item {
+            padding: 8px 12px;
+            display: flex;
+            align-items: center;
+            border-radius: 4px;
+            font-size: 0.875rem;
+            color: #24292f;
+            cursor: pointer;
+        }
+        .sort-dropdown .dropdown-item:hover {
+            background: #f6f8fa;
+        }
+        .sort-dropdown .dropdown-item.active {
+            background: transparent;
+            color: #24292f;
+            font-weight: 600;
+        }
+        .sort-dropdown .dropdown-item .check-icon {
+            width: 16px;
+            margin-right: 8px;
+            color: #0969da;
+            visibility: hidden;
+        }
+        .sort-dropdown .dropdown-item.active .check-icon {
+            visibility: visible;
+        }
+        .sort-dropdown .dropdown-item i:not(.check-icon) {
+            margin-right: 8px;
+            color: #57606a;
+            width: 16px;
+            text-align: center;
+        }
+    </style>
+    <style>
         :root {
             --primary: #4f46e5;
             --primary-dark: #3730a3;

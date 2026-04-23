@@ -15,7 +15,7 @@ class JurusanController extends Controller
         $jurusan = Jurusan::withCount(['mahasiswa', 'matakuliah'])
             ->when($search, function ($query, $search) {
                 $query->where('nama_jurusan', 'like', "%{$search}%")
-                      ->orWhere('akreditasi', 'like', "%{$search}%");
+                    ->orWhere('akreditasi', 'like', "%{$search}%");
             })
             ->orderBy('nama_jurusan')
             ->paginate(10)

@@ -12,20 +12,28 @@ class MahasiswaController extends Controller
     public function index(Request $request)
     {
         $search = $request->input('search');
+        $sortBy = $request->input('sort_by', 'nama');
+        $sortOrder = $request->input('order', 'asc');
 
         $mahasiswa = Mahasiswa::with('jurusan')
             ->when($search, function ($query, $search) {
                 $query->where('nim', 'like', "%{$search}%")
-                      ->orWhere('nama', 'like', "%{$search}%")
-                      ->orWhereHas('jurusan', function ($q) use ($search) {
-                          $q->where('nama_jurusan', 'like', "%{$search}%");
-                      });
+                    ->orWhere('nama', 'like', "%{$search}%")
+                    ->orWhereHas('jurusan', function ($q) use ($search) {
+                        $q->where('nama_jurusan', 'like', "%{$search}%");
+                    });
             })
-            ->orderBy('nama')
+            ->when($sortBy === 'jurusan', function ($query) use ($sortOrder) {
+                $query->join('jurusan', 'mahasiswa.id_jurusan', '=', 'jurusan.id_jurusan')
+                    ->orderBy('jurusan.nama_jurusan', $sortOrder)
+                    ->select('mahasiswa.*');
+            }, function ($query) use ($sortBy, $sortOrder) {
+                $query->orderBy($sortBy, $sortOrder);
+            })
             ->paginate(10)
             ->withQueryString();
 
-        return view('mahasiswa.index', compact('mahasiswa', 'search'));
+        return view('mahasiswa.index', compact('mahasiswa', 'search', 'sortBy', 'sortOrder'));
     }
 
     public function create()

@@ -10,8 +10,8 @@ class DashboardController extends Controller
 {
     public function index()
     {
-        $totalJurusan    = Jurusan::count();
-        $totalMahasiswa  = Mahasiswa::count();
+        $totalJurusan = Jurusan::count();
+        $totalMahasiswa = Mahasiswa::count();
         $totalMatakuliah = Matakuliah::count();
 
         $jurusanList = Jurusan::withCount(['mahasiswa', 'matakuliah'])
