@@ -10,7 +10,7 @@
     <div class="card-header d-flex flex-wrap gap-2 align-items-center justify-content-between">
         <div>
             <h5 class="mb-0" style="font-size:0.95rem; font-weight:600;">Daftar Mahasiswa</h5>
-            <small class="text-muted" style="font-size:0.78rem;">Total: {{ $mahasiswa->total() }} mahasiswa</small>
+            <small id="total-count" class="text-muted" style="font-size:0.78rem;">Total: {{ $mahasiswa->total() }} mahasiswa</small>
         </div>
         <a href="{{ route('mahasiswa.create') }}" id="btn-tambah-mahasiswa"
            class="btn btn-sm text-white" style="background:#0ea5e9;">
@@ -37,7 +37,7 @@
         </form>
     </div>
 
-    <div class="card-body p-0">
+    <div id="search-results" class="card-body p-0">
         @if($mahasiswa->isEmpty())
             <div class="empty-state">
                 <i class="bi bi-people text-muted"></i>
@@ -137,9 +137,38 @@
 @push('scripts')
 <script>
     let searchTimer;
-    document.getElementById('search').addEventListener('input', function() {
+    const searchInput = document.getElementById('search');
+    const resultsContainer = document.getElementById('search-results');
+    const totalCount = document.getElementById('total-count');
+
+    searchInput.addEventListener('input', function() {
         clearTimeout(searchTimer);
-        searchTimer = setTimeout(() => document.getElementById('searchForm').submit(), 400);
+        searchTimer = setTimeout(() => {
+            const url = new URL(window.location.href);
+            url.searchParams.set('search', searchInput.value);
+            
+            resultsContainer.style.opacity = '0.5';
+
+            fetch(url)
+                .then(response => response.text())
+                .then(html => {
+                    const parser = new DOMParser();
+                    const doc = parser.parseFromString(html, 'text/html');
+                    
+                    resultsContainer.innerHTML = doc.getElementById('search-results').innerHTML;
+                    
+                    if (totalCount && doc.getElementById('total-count')) {
+                        totalCount.innerHTML = doc.getElementById('total-count').innerHTML;
+                    }
+
+                    resultsContainer.style.opacity = '1';
+                    window.history.pushState({}, '', url);
+                })
+                .catch(err => {
+                    console.error('Search error:', err);
+                    resultsContainer.style.opacity = '1';
+                });
+        }, 300);
     });
 </script>
 @endpush
