@@ -54,4 +54,22 @@ class JurusanController extends Controller
         return redirect()->route('jurusan.index')
             ->with('success', 'Jurusan berhasil dihapus.');
     }
+
+    public function exportExcel()
+    {
+        $jurusan = Jurusan::withCount(['mahasiswa', 'matakuliah'])->orderBy('nama_jurusan')->get();
+
+        return response()
+            ->view('jurusan.excel', compact('jurusan'))
+            ->header('Content-Type', 'application/vnd.ms-excel')
+            ->header('Content-Disposition', 'attachment; filename=jurusan.xls');
+    }
+
+    public function print()
+    {
+        $jurusan = Jurusan::withCount(['mahasiswa', 'matakuliah'])->orderBy('nama_jurusan')->get();
+
+        return view('jurusan.print', compact('jurusan'));
+    }
 }
+

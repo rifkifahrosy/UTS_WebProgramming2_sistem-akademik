@@ -22,10 +22,18 @@
             <h5 class="mb-0" style="font-size:0.95rem; font-weight:600;">Daftar Mata Kuliah</h5>
             <small id="total-count" class="text-muted" style="font-size:0.78rem;">Total: {{ $matakuliah->total() }} mata kuliah</small>
         </div>
-        <a href="{{ route('matakuliah.create') }}" id="btn-tambah-matakuliah"
-           class="btn btn-sm text-white" style="background:#10b981;">
-            <i class="bi bi-plus-lg me-1"></i> Tambah Mata Kuliah
-        </a>
+        <div class="d-flex gap-2">
+            <a href="{{ route('matakuliah.excel') }}" class="btn btn-sm btn-outline-success">
+                <i class="bi bi-file-earmark-excel-fill"></i> Export Excel
+            </a>
+            <a href="{{ route('matakuliah.print') }}" target="_blank" class="btn btn-sm btn-outline-danger">
+                <i class="bi bi-printer-fill"></i> Cetak PDF
+            </a>
+            <a href="{{ route('matakuliah.create') }}" id="btn-tambah-matakuliah"
+               class="btn btn-sm text-white" style="background:#10b981;">
+                <i class="bi bi-plus-lg me-1"></i> Tambah Mata Kuliah
+            </a>
+        </div>
     </div>
 
     {{-- Search --}}

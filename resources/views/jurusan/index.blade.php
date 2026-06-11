@@ -12,10 +12,18 @@
             <h5 class="mb-0" style="font-size:0.95rem; font-weight:600;">Daftar Jurusan</h5>
             <small id="total-count" class="text-muted" style="font-size:0.78rem;">Total: {{ $jurusan->total() }} jurusan</small>
         </div>
-        <a href="{{ route('jurusan.create') }}" id="btn-tambah-jurusan"
-           class="btn btn-sm text-white" style="background:#4f46e5;">
-            <i class="bi bi-plus-lg me-1"></i> Tambah Jurusan
-        </a>
+        <div class="d-flex gap-2">
+            <a href="{{ route('jurusan.excel') }}" class="btn btn-sm btn-outline-success">
+                <i class="bi bi-file-earmark-excel-fill"></i> Export Excel
+            </a>
+            <a href="{{ route('jurusan.print') }}" target="_blank" class="btn btn-sm btn-outline-danger">
+                <i class="bi bi-printer-fill"></i> Cetak PDF
+            </a>
+            <a href="{{ route('jurusan.create') }}" id="btn-tambah-jurusan"
+               class="btn btn-sm text-white" style="background:#4f46e5;">
+                <i class="bi bi-plus-lg me-1"></i> Tambah Jurusan
+            </a>
+        </div>
     </div>
 
     {{-- Search --}}

@@ -68,4 +68,22 @@ class MatakuliahController extends Controller
         return redirect()->route('matakuliah.index')
             ->with('success', 'Mata kuliah berhasil dihapus.');
     }
+
+    public function exportExcel()
+    {
+        $matakuliah = Matakuliah::with('jurusan')->orderBy('nama_matakuliah')->get();
+
+        return response()
+            ->view('matakuliah.excel', compact('matakuliah'))
+            ->header('Content-Type', 'application/vnd.ms-excel')
+            ->header('Content-Disposition', 'attachment; filename=matakuliah.xls');
+    }
+
+    public function print()
+    {
+        $matakuliah = Matakuliah::with('jurusan')->orderBy('nama_matakuliah')->get();
+
+        return view('matakuliah.print', compact('matakuliah'));
+    }
 }
+

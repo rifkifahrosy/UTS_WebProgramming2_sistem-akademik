@@ -21,6 +21,20 @@ Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 Route::middleware('auth')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
+    // Jurusan print routes
+    Route::get('/jurusan/export-excel', [JurusanController::class, 'exportExcel'])->name('jurusan.excel');
+    Route::get('/jurusan/print', [JurusanController::class, 'print'])->name('jurusan.print');
+
+    // Mahasiswa print routes
+    Route::get('/mahasiswa/export-excel', [MahasiswaController::class, 'exportExcel'])->name('mahasiswa.excel');
+    Route::get('/mahasiswa/export-csv', [MahasiswaController::class, 'exportCsv'])->name('mahasiswa.export-csv');
+    Route::get('/mahasiswa/print', [MahasiswaController::class, 'print'])->name('mahasiswa.print');
+
+    // Matakuliah print routes
+    Route::get('/matakuliah/export-excel', [MatakuliahController::class, 'exportExcel'])->name('matakuliah.excel');
+    Route::get('/matakuliah/print', [MatakuliahController::class, 'print'])->name('matakuliah.print');
+
+    // Resources
     Route::resource('jurusan', JurusanController::class)->except(['show']);
     Route::resource('mahasiswa', MahasiswaController::class)->except(['show']);
     Route::resource('matakuliah', MatakuliahController::class)->except(['show']);
